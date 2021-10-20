@@ -4,7 +4,7 @@ const defaults = {
   enabled:       true,        // <boolean|function>      Whether to output logs
   title:         "",          // <string>       The title to prefix the logs with 
   subtitle:      false,       // <string>       Secondary title prefix
-  devTitle:      "dev log",   // <string>     Text to use when using the "developer" log output (for developers to see)
+  devTitle:      "dev",       // <string>     Text to use when using the "developer" log output (for developers to see)
   devEnabled:    true,        // <boolean|function>      Whether to output .dev()  logs
   colorTitle:    "green",
   colorSubtitle: "green",
