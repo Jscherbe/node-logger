@@ -34,16 +34,16 @@ Fake example of basic usage below.
 
 ## Methods
 
-- log(...messages)** - Output standard style log
-- required(...messages) - Always output messages (regardless of options.enabled)
-- error(...messages) - Output always output error styled log
-- warn(...messages) - Output warning styled log
-- list(title, array) - Output bullet list styled log with a title
-- listOrdered(title, array) - Output ordered (1, 2, 3) list styled log with a title
-- devLog(...messages) - Output standard style log for developer, Uses the 'options.devEnabled' flag for output condition. Adds options.devTitle prefix
-- memory(scriptProcess, ...messages) - Display a dev log of the passed processes memory usage, plus any additional messages, process should be the process you want the memory output from ie `process`
-- time(label) | Start a timer, optional label if using multiple at once
-- timeEnd(label, ...messages) | Stop timer and output duration, plus any other messages a timer, optional label if using multiple at once
+- **log**(...messages)** - Output standard style log
+- **required**(...messages) - Always output messages (regardless of options.enabled)
+- **error**(...messages) - Output always output error styled log
+- **warn**(...messages) - Output warning styled log
+- **list**(title, array) - Output bullet list styled log with a title
+- **listOrdered**(title, array) - Output ordered (1, 2, 3) list styled log with a title
+- **devLog**(...messages) - Output standard style log for developer, Uses the 'options.devEnabled' flag for output condition. Adds options.devTitle prefix
+- **memory**(scriptProcess, ...messages) - Display a dev log of the passed processes memory usage, plus any additional messages, process should be the process you want the memory output from ie `process`
+- **time**(label) | Start a timer, optional label if using multiple at once
+- **timeEnd**(label, ...messages) | Stop timer and output duration, plus any other messages a timer, optional label if using multiple at once
 
 ## Options
 
