@@ -28,3 +28,12 @@ logger.listOrdered("Fruit (ordered)", [
   "bannana"
 ]);
 logger.memory(process, "memory test");
+
+
+let functionLoggerCounter = 0;
+const functionLogger = require("./index.js")({
+  title: "Function Enabled Logger",
+  enabled: () => functionLoggerCounter++
+});
+functionLogger.log("This SHOULD NOT BE VISIBLE");
+functionLogger.log("This should be visible");

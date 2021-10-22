@@ -12,15 +12,17 @@ const defaults = {
   colorWarning:  "yellow",
   colorDev:      "magenata"
 };
-
 /**
- *   Returns a debug object based on the configuration past
- *   @param  {object} passed The options passed when constructing the debug Object
- *   @return {Object}        Object with methods that used the passed options
+ * @typedef {Object} logger-instance
  */
-module.exports = function(passed) {
+/**
+ *   Returns a logger instance based on the configuration
+ *   @param  {object} config The options for the logger instance
+ *   @return {logger-instance} Object with methods to use to log output
+ */
+module.exports = function(config) {
 
-  const options = Object.assign({}, defaults, passed);
+  const options = Object.assign({}, defaults, config);
 
   let prefix = options.title ? chalk.bold[options.colorTitle](`${ options.title } `) : "";
 
@@ -40,25 +42,53 @@ module.exports = function(passed) {
   }
 
   return {
-    log: function(...msgs) {
+    /**
+     * Changes to merge into options (ie. enable = false)
+     * @param {Object} changes 
+     */
+    setOptions(changes) {
+      Object.assign(options, changes, options);
+    },
+    /**
+     * Standard console.log 
+     * @param  {*} msgs Messages to output in console
+     */
+    log(...msgs) {
       if (!isEnabled()) return; 
       msgs.unshift(prefix);
       console.log.apply(console, msgs);
     },
-    required: function(...msgs) {
+    /**
+     * Always output messages (regardless of options.enabled)
+     * @param  {*} msgs Messages to output in console
+     */
+    required(...msgs) {
       msgs.unshift(prefix);
       console.log.apply(console, msgs);
     },
-    error: function(...msgs) {
+    /**
+     * Always output styled error message 
+     * @param  {*} msgs Messages to output in console
+     */
+    error(...msgs) {
       msgs.unshift(chalk[options.colorError]('(Error) '));
       this.required.apply(this, msgs);
     },
-    warn: function(...msgs) {
+    /**
+     * Output warning styles logs
+     * @param  {*} msgs Messages to output in console
+     */    
+    warn(...msgs) {
       if (!isEnabled()) return;
       msgs.unshift(chalk[options.colorWarning]('(Warning) '));
       this.log.apply(this, msgs);
     },
-    list: function(title, array) {
+    /**
+     * Output log in list (unordered/bullet) form
+     * @param {String} title Title for the list
+     * @param {Array} array Array of items to log
+     */   
+    list(title, array) {
       if (!isEnabled()) return;
       if (!title) {
         console.log(" - " +  array.join("\n - "));
@@ -66,7 +96,12 @@ module.exports = function(passed) {
         this.log.call(this, title, "\n - " +  array.join("\n - "));
       }
     },
-    listOrdered: function(title, array) {
+    /**
+     * Output log in an ordered list form
+     * @param {String} title Title for the list
+     * @param {Array} array Array of items to log
+     */   
+    listOrdered(title, array) {
       if (!isEnabled()) return;
       var list = array.reduce((acc, current, index) => {
         var item = "  " + (index + 1) + ". " + current.toString();
@@ -78,13 +113,24 @@ module.exports = function(passed) {
         this.log.call(this, title, "\n" + list);
       }
     },
-    devLog: function(...msgs) {
+    /**
+     * Output a log for the developer
+     * - Uses the 'options.devEnabled' flag for output condition
+     * - Styled differently (adds options.devTitle) to prefix
+     * @param  {*} msgs Messages to output in console
+     */
+    devLog(...msgs) {
       if (!isEnabled(true)) return; 
       msgs.unshift(chalk.magenta(`(${ options.devTitle })`));
       msgs.unshift(prefix);
       console.log.apply(console, msgs);
     },
-    memory: function(scriptProcess, ...msgs) {
+    /**
+     * Display a dev log of the passed processes memory usage, plus any additional messages 
+     * @param {Object} scriptProcess The process to use for memory log (ie. process variable in your script)
+     * @param  {*} msgs Other messages to include
+     */
+    memory(scriptProcess, ...msgs) {
       if (!isEnabled()) return; 
 
       const used = scriptProcess.memoryUsage(),
@@ -95,11 +141,22 @@ module.exports = function(passed) {
       }
       this.devLog.apply(this, msgs.concat(details));
     },
-    time: function(label = prefix) {
+    /**
+     * Start a log timer
+     * - call logger.timeEnd() to output the time span
+     * @param {String} label A custom label to use if you are running multiple time checks, defualts to prefix from options
+     */
+    time(label = prefix) {
       if (!isEnabled()) return;
       console.time(label);
     },
-    timeEnd: function(label = prefix, ...msgs) {
+    /**
+     * Start a log timer
+     * - call logger.timeEnd() to output the time span
+     * @param {String} label A custom label to use if you are running multiple time checks, defualts to prefix from options
+     * @param {*} msgs Other messages to include in the output
+     */    
+    timeEnd(label = prefix, ...msgs) {
       if (!isEnabled()) return;
       msgs.unshift(chalk.yellow('(Time Stamp)'));
       this.log.apply(this, msgs);
