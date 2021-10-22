@@ -1,6 +1,6 @@
 {
   "name": "@ulu/node-logger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reusable colored logging module for node",
   "main": "index.js",
   "scripts": {
